@@ -8,6 +8,11 @@ OPENAI_MODEL = "gpt-4o-mini"
 
 app = FastAPI()
 
+# Ruta raíz para verificar que el proxy está vivo
+@app.get("/")
+def root():
+    return {"status": "proxy alive"}
+
 TRIGGERS = re.compile(r"\b(d[oó]lar|usd|uf|euro|eur)\b", re.IGNORECASE)
 
 def get_dolar():
@@ -29,7 +34,7 @@ async def chat(req: Request):
         if dolar:
             messages.insert(0, {
                 "role":"system",
-                "content":f"El valor actual del dólar en Chile es aproximadamente {dolar} CLP."
+                "content":f"The current USD to CLP exchange rate is approximately {dolar} CLP."
             })
 
     payload["model"] = OPENAI_MODEL
